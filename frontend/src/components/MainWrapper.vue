@@ -1,10 +1,17 @@
 <template>
-
+  <div id="mainWrapper">
+    <Catalog/>
+  </div>
 </template>
 
 <script>
+import Catalog from "@/components/Catalog";
+
 export default {
-  name: "MainWrapper"
+  name: "MainWrapper",
+  components: {
+    Catalog
+  }
 }
 </script>
 
