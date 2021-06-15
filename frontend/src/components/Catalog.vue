@@ -1,6 +1,7 @@
 <template>
   <div id="catalog">
-    <h1>Каталог</h1>
+    <item/>
+    <item/>
     <item/>
   </div>
 </template>
@@ -16,6 +17,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+#catalog {
+  display: grid;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="mainWrapper">
+  <div id="main-wrapper">
     <Catalog/>
   </div>
 </template>
@@ -16,5 +16,8 @@ export default {
 </script>
 
 <style scoped>
-
+#main-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
 </style>
