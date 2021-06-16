@@ -1,18 +1,34 @@
 <template>
   <div id="catalog">
-    <item/>
-    <item/>
-    <item/>
+    <CatalogItem
+        v-for="product in PRODUCTS"
+        :key="product.id"
+        v-bind:product_data="product"
+    />
   </div>
 </template>
 
 <script>
-import Item from "@/components/Item";
+import CatalogItem from "@/components/CatalogItem";
+import {mapActions, mapGetters} from "vuex"
 
 export default {
   name: "Catalog",
   components: {
-    Item
+    CatalogItem,
+  },
+  methods: {
+    ...mapActions([
+      'GET_PRODUCTS_FROM_API'
+    ]),
+  },
+  computed: {
+    ...mapGetters([
+      'PRODUCTS'
+    ]),
+  },
+  mounted() {
+    this.GET_PRODUCTS_FROM_API()
   }
 }
 </script>
