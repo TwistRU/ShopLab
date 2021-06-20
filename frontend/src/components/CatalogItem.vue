@@ -25,7 +25,7 @@
         Нет в наличии
       </button>
       <button
-          v-else-if="!checkInclude(this.CART(), product_data)"
+          v-else-if="!checkInclude(this.CART, product_data)"
           class="buy-btn"
           @click="addToCart"
       >
@@ -59,6 +59,9 @@ export default {
     },
   },
   computed: {  // TODO delete
+    ...mapGetters([
+      "CART",
+    ]),
     imgUrl: function () {
       return "http://www.placehold.it/200x200?text=" + this.product_data['image'].toString();
     },
@@ -72,9 +75,6 @@ export default {
   methods: {
     ...mapActions([
       "ADD_TO_CART",
-    ]),
-    ...mapGetters([
-      "CART",
     ]),
     addToCart() {
       this.ADD_TO_CART(this.product_data);

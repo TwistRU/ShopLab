@@ -7,7 +7,10 @@
       <div class="cart-item__name">
         <p>{{ item['name'] }}</p>
       </div>
-      <button class="cart-item__delete_btn">
+      <button
+          class="cart-item__delete_btn"
+          @click="$emit('deleteFromCart')"
+      >
         Удалить
       </button>
     </div>
