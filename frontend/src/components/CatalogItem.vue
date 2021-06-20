@@ -25,7 +25,7 @@
         Нет в наличии
       </button>
       <button
-          v-else-if="this.CART().indexOf(product_data) === -1"
+          v-else-if="!checkInclude(this.CART(), product_data)"
           class="buy-btn"
           @click="addToCart"
       >
@@ -78,6 +78,13 @@ export default {
     ]),
     addToCart() {
       this.ADD_TO_CART(this.product_data);
+    },
+    checkInclude(arr, obj) {
+      for (let i = 0; i < arr.length; ++i) {
+        if (arr[i]['id'] === obj['id'])
+          return true;
+      }
+      return false;
     },
   },
 }

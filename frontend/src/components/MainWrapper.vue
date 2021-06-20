@@ -23,7 +23,7 @@ export default {
     ...mapGetters([
       "CART"
     ])
-  }
+  },
 }
 </script>
 

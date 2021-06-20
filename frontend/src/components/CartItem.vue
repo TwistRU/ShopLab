@@ -1,16 +1,16 @@
 <template>
   <div class="cart-item__wrapper">
-      <div class="cart-item__product-image">
-        <img :src="imgUrl" alt="img"/>
+    <div class="cart-item__product-image">
+      <img :src="imgUrl" alt="img"/>
+    </div>
+    <div class="cart-item__product_info">
+      <div class="cart-item__name">
+        <p>{{ item['name'] }}</p>
       </div>
-      <div class="cart-item__product_info">
-        <div class="cart-item__name">
-          <p>{{ item['name'] }}</p>
-        </div>
-        <button class="cart-item__delete_btn">
-          Удалить
-        </button>
-      </div>
+      <button class="cart-item__delete_btn">
+        Удалить
+      </button>
+    </div>
 
     <div class="cart-item__amount">
       <div class="cart-item__product-count-buttons">
@@ -19,7 +19,7 @@
             -
           </button>
           <input
-              v-model="count"
+              v-model="item['count']"
               type="number"
               min="1"
               :max="item['available']"
@@ -30,7 +30,7 @@
         </div>
         <div
             class="cart-item__item-price"
-            v-if="count != 1"
+            v-if="item['count'] !== '1'"
         >
           <p>{{ item['price'] }} ₽/шт</p>
         </div>
@@ -50,11 +50,6 @@
 <script>
 export default {
   name: "CartItem",
-  data() {
-    return {
-      count: 1,
-    }
-  },
   props: {
     item: {
       type: Object,
@@ -66,8 +61,11 @@ export default {
       return "http://www.placehold.it/200x200?text=" + this.item['image'].toString();
     },
     totalItemPrice: function () {
-      return this.item['price'] * this.count;
+      return this.item['price'] * Number(this.item['count']);
     },
+  },
+  mounted() {
+    this.$set(this.item, 'count', '1')
   },
 }
 </script>
