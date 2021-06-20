@@ -1,8 +1,9 @@
 <template>
   <div id="catalog">
+    <h2>Каталог</h2>
     <CatalogItem
         v-for="product in PRODUCTS"
-        :key="product.id"
+        :key="product['id']"
         v-bind:product_data="product"
     />
   </div>
