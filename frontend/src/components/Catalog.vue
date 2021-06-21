@@ -1,5 +1,10 @@
 <template>
-  <div id="catalog">
+  <div class="catalog">
+    <router-link :to="{name: 'cart'}">
+      <div class="catalog__link-to-cart">
+        Корзина: {{ CART.length }}
+      </div>
+    </router-link>
     <h2>Каталог</h2>
     <CatalogItem
         v-for="product in PRODUCTS"
@@ -20,12 +25,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      'GET_PRODUCTS_FROM_API'
+      'GET_PRODUCTS_FROM_API',
     ]),
   },
   computed: {
     ...mapGetters([
-      'PRODUCTS'
+      'PRODUCTS',
+      'CART',
     ]),
   },
   mounted() {
@@ -35,7 +41,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#catalog {
+.catalog {
   display: grid;
+
+  &__link-to-cart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: $padding;
+    border: solid 1px #aeaeae;
+  }
 }
 </style>
