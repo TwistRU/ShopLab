@@ -7,5 +7,4 @@ module.exports = {
         }
     },
     publicPath: "./",
-    outputDir: "D:\\Programs\\ShopLab\\frontend\\dist"
 };

@@ -10,7 +10,7 @@ from flask_jwt_extended import JWTManager
 
 from flask_cors import CORS
 
-app = Flask(__name__, template_folder='../frontend/dist/', static_folder='../frontend/dist/')
+app = Flask(__name__, template_folder='../dist/', static_folder='../dist/')
 
 salt = os.environ.get('SALT')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')

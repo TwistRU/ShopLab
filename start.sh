@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd frontend
 npm install
+npm i @vue/cli-service
 npm run build
 
 cd ../backend
