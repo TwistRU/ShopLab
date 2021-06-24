@@ -1,6 +1,6 @@
 from sqlalchemy import orm
 
-from backend.config import db
+from config import db
 
 
 class UserDB(db.Model):

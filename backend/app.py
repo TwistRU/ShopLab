@@ -2,8 +2,8 @@ import os
 
 from flask import send_from_directory, render_template
 
-from backend.config import app, db
-from backend.api_v1 import api_v1
+from config import app, db
+from api_v1 import api_v1
 
 
 @app.route('/')
