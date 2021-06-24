@@ -8,7 +8,7 @@
     <h2>Каталог</h2>
     <CatalogItem
         v-for="product in PRODUCTS"
-        :key="product['id']"
+        :key="product['item_id']"
         v-bind:product_data="product"
     />
   </div>
@@ -35,7 +35,7 @@ export default {
     ]),
   },
   mounted() {
-    this.GET_PRODUCTS_FROM_API()
+    this.GET_PRODUCTS_FROM_API();
   }
 }
 </script>

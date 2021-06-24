@@ -9,20 +9,23 @@
     <p v-if="!CART.length">Корзина пуста</p>
     <cart-item
         v-for="(item, index) in CART"
-        :key="item.id"
+        :key="item['item_id']"
         :item="item"
         @deleteFromCart="deleteFromCart(index)"
     />
+    <cart-total/>
   </div>
 </template>
 
 <script>
 import CartItem from "@/components/CartItem";
 import {mapActions, mapGetters} from "vuex";
+import CartTotal from "@/components/CartTotal";
 
 export default {
   name: "Cart",
   components: {
+    CartTotal,
     CartItem,
   },
   computed: {

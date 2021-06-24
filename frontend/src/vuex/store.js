@@ -4,11 +4,13 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
+let host = "https://fefu-shop-lab.herokuapp.com/"
+// let host = 'http://192.168.1.43:5000/'
+
 let store = new Vuex.Store({
     state: {
         // products
         products: [],
-        update_time: 0,
 
         // cart
         cart: [],
@@ -17,7 +19,6 @@ let store = new Vuex.Store({
         // products
         SET_PRODUCTS_TO_STATE: (state, products) => {
             state.products = products.products;
-            state.update_time = products.time;
         },
 
         // cart
@@ -26,13 +27,18 @@ let store = new Vuex.Store({
         },
         DELETE_FROM_CART: (state, index) => {
             state.cart.splice(index, 1);  // удалить 1 элемент начиная с индекса index
-        }
+        },
     },
     actions: {
         // products
         GET_PRODUCTS_FROM_API({commit}) {
-            return axios('http://192.168.1.43:3000/data', {
-                method: "get"
+            return axios({
+                method: "get_list",
+                url: host.toString() + '/api/v1/item',
+                params: {
+                    page: 1,
+                    page_limit: 50
+                }
             })
                 .then((products) => {
                     commit('SET_PRODUCTS_TO_STATE', products.data);

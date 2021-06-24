@@ -14,9 +14,6 @@
       <div class="product-buy__price">
         <p>{{ product_data['price'] }}₽</p>
       </div>
-      <button class="wish-list-btn">
-        ♥
-      </button>
       <button
           v-if="!product_data['available']"
           class="buy-btn"
@@ -81,7 +78,7 @@ export default {
     },
     checkInclude(arr, obj) {
       for (let i = 0; i < arr.length; ++i) {
-        if (arr[i]['id'] === obj['id'])
+        if (arr[i]['item_id'] === obj['item_id'])
           return true;
       }
       return false;
@@ -132,14 +129,6 @@ export default {
 .product-buy__price {
   @include grid-element-pos(2, 3, 1, 2);
   display: flex;
-}
-
-.wish-list-btn {
-  @include grid-element-pos(1, 2, 2, 3);
-  width: 60%;
-  height: 50%;
-  margin: 0 2px auto auto;
-
 }
 
 .buy-btn {
