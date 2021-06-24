@@ -1,24 +1,23 @@
-import os
+from flask import send_from_directory, send_file, url_for, render_template
 
-from datetime import timedelta
+from backend.config import app
 
-from flask import Flask
-from flask_restful import Api
 
-from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required, JWTManager
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-app = Flask(__name__)
 
-api = Api(app)
+@app.route('/css/<filename>')
+def get_css(filename):
+    return send_from_directory(app.static_folder + '/css/', filename)
 
-salt = os.environ.get('SALT')
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-jwt = JWTManager(app)
+@app.route('/js/<filename>')
+def get_js(filename):
+    return send_from_directory(app.static_folder + '/js/', filename)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
