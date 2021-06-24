@@ -3,8 +3,8 @@ from flask_cors import CORS
 from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
-from config import db
-from database import ItemDB
+from backend.config import db
+from backend.database import ItemDB
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
 api = Api(api_v1)
