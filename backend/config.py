@@ -3,11 +3,12 @@ import os
 from datetime import timedelta
 
 from flask import Flask
-from flask_restful import Api
 
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_jwt_extended import JWTManager
+
+from flask_cors import CORS
 
 app = Flask(__name__, template_folder='../frontend/dist/', static_folder='../frontend/dist/')
 
@@ -21,6 +22,6 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-api = Api(app)
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
+CORS(app)
