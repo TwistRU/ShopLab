@@ -61,7 +61,7 @@ export default {
   },
   computed: {  // TODO delete
     imgUrl: function () {
-      return "http://www.placehold.it/200x200?text=" + this.item['image'].toString();
+      return "https://www.placehold.it/200x200?text=" + this.item['image'].toString();
     },
     totalItemPrice: function () {
       return this.item['price'] * Number(this.item['count']);
