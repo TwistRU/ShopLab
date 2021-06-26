@@ -17,7 +17,9 @@ export default {
 .router-linki {
   display: flex;
   flex-wrap: nowrap;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right:  0;
 
   &__link-to {
     top: 10px;
