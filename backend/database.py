@@ -11,9 +11,9 @@ class UserDB(db.Model):
     first_name = db.Column(db.String, nullable=False)
     second_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    login = db.Column(db.String, nullable=False)
+    login = db.Column(db.String, nullable=False, primary_key=True, unique=True)
     password_hash = db.Column(db.String, nullable=False)
-    role = db.Column(db.Integer, nullable=False)
+    role = db.Column(db.Integer, nullable=False, default=0)
 
 
 class ItemDB(db.Model):
