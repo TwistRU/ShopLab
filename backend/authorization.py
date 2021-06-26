@@ -1,12 +1,15 @@
-from flask import request, Blueprint
-from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_restful import Resource, reqparse
+from flask import Blueprint
+from flask_cors import CORS
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
+from flask_restful import reqparse
 from sqlalchemy.exc import IntegrityError
 
 from backend.config import bcrypt, db
 from backend.database import UserDB
 
 authBP = Blueprint('authBP', __name__, url_prefix='/auth')
+
+CORS(authBP, methods=['GET', 'POST'])
 
 
 @authBP.route('registration', methods=['POST'])
@@ -39,10 +42,18 @@ def login():
     args = parser.parse_args()
     user = UserDB.query.filter_by(login=args['login']).first()
     if user is None or not bcrypt.check_password_hash(user.password_hash, args['password']):
-        return {'error': 'Email or password invalid'}, 401
+        return {'error': 'Login or password invalid'}, 401
     access_token = create_access_token(user.user_id)
     refresh_token = create_refresh_token(user.user_id)
     return {
-        'access_token': access_token,
-        'refresh_token': refresh_token
-    }, 200
+               'access_token': access_token,
+               'refresh_token': refresh_token
+           }, 200
+
+
+@authBP.route('/refresh')
+@jwt_required(refresh=True)
+def refresh():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
+    return {'access_token': access_token}, 200

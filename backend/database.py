@@ -13,7 +13,7 @@ class UserDB(db.Model):
     email = db.Column(db.String, nullable=False)
     login = db.Column(db.String, nullable=False, primary_key=True, unique=True)
     password_hash = db.Column(db.String, nullable=False)
-    role = db.Column(db.Integer, nullable=False, default=0)
+    role = db.Column(db.Integer, nullable=False, default=0)  # 0 = user, 1 = admin, 2 = ban
 
 
 class ItemDB(db.Model):
@@ -24,7 +24,7 @@ class ItemDB(db.Model):
     image: str = db.Column(db.String, nullable=False)
     name: str = db.Column(db.String, nullable=False)
     more_info: str = db.Column(db.String)
-    price: float = db.Column(db.Float, nullable=False)
+    price: float = db.Column(db.Float, nullable=False, )
     available: int = db.Column(db.Integer, nullable=False)
     rating: float = db.Column(db.Float, nullable=False)
 

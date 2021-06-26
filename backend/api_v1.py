@@ -1,10 +1,11 @@
-from flask import request, jsonify, Blueprint
+from flask import Blueprint
 from flask_cors import CORS
 from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
 from backend.config import db
-from backend.database import ItemDB
+from backend.database import ItemDB, UserDB
+from backend.methods import user_is_admin_required
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
 api = Api(api_v1)
@@ -37,12 +38,16 @@ class ItemF(Resource):
         args = self.parser.parse_args()
         page = int(args['page'])
         page_limit = int(args['page_limit'])
-        item = ItemDB.query.offset((page - 1) * page_limit)
-        item = item.limit(page_limit)
+        item = (
+            ItemDB.query
+                .offset((page - 1) * page_limit)
+                .limit(page_limit)
+        )
         if item is None:
             return {'error': 'Bad Request'}, 400
         return {'products': [el.to_dict() for el in item]}, 200
 
+    @user_is_admin_required
     def post(self):
         args = {key: val for key, val in self.parser.parse_args().items()
                 if key in ('image', 'name', 'more_info', 'price', 'available', 'rating')}
@@ -55,6 +60,7 @@ class ItemF(Resource):
 
         return {'status': 'ok'}, 200
 
+    @user_is_admin_required
     def patch(self):
         args = {key: val for key, val in self.parser.parse_args().items()
                 if key in ('item_id', 'image', 'name', 'more_info', 'price', 'available', 'rating')}
@@ -66,6 +72,7 @@ class ItemF(Resource):
         db.session.commit()
         return {'status': 'ok'}, 200
 
+    @user_is_admin_required
     def delete(self):
         item_id = self.parser.parse_args()['item_id']
         item = ItemDB.query.filter_by(item_id=item_id).first()
