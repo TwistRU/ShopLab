@@ -31,7 +31,7 @@ class ItemF(Resource):
         print(item)
         if item is None:
             return {'error': 'Bad Request'}, 400
-        return {'products': [item.to_dict()]}, 200
+        return {'product': item.to_dict()}, 200
 
     def get_list(self):
         args = self.parser.parse_args()
@@ -71,3 +71,4 @@ class ItemF(Resource):
         item = ItemDB.query.filter_by(item_id=item_id).first()
         db.session.delete(item)
         db.session.commit()
+        return {'status': 'ok'}

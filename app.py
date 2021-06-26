@@ -4,6 +4,7 @@ from flask import send_from_directory, render_template
 
 from backend.config import app, db
 from backend.api_v1 import api_v1
+from backend.authorization import authBP
 
 
 @app.route('/')
@@ -22,6 +23,7 @@ def get_js(filename):
 
 
 app.register_blueprint(api_v1)
+app.register_blueprint(authBP)
 
 if __name__ == '__main__':
     db.create_all()

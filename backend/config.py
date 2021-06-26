@@ -3,6 +3,7 @@ import os
 from datetime import timedelta
 
 from flask import Flask
+from flask_bcrypt import Bcrypt
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -26,4 +27,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 CORS(app)
