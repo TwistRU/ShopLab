@@ -6,3 +6,19 @@
   grid-row-start: $row-start;
   grid-row-end: $row-end;
 }
+
+@mixin some_func() {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 50vw;
+    min-height: 50vw;
+
+    &__inputs {
+      padding-top: $padding;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      max-width: fit-content;
+    }
+}
