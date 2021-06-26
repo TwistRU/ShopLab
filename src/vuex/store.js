@@ -4,14 +4,16 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
-let host = "https://fefu-shop-lab.herokuapp.com/"
-// let host = 'http://192.168.1.43:5000/'
+import {host} from '@/main'
 
 let store = new Vuex.Store({
     state: {
         // products
         products: [],
-
+        // user
+        authorized: false,
+        access_token: '',
+        refresh_token: '',
         // cart
         cart: [],
     },
@@ -20,7 +22,12 @@ let store = new Vuex.Store({
         SET_PRODUCTS_TO_STATE: (state, products) => {
             state.products = products.products;
         },
-
+        //user
+        SET_AUTHORIZED: (state, data) => {
+            state.authorized = data['auth_state'];
+            state.access_token = data['access_token'];
+            state.refresh_token = data['refresh_token'];
+        },
         // cart
         ADD_TO_CART: (state, product) => {
             state.cart.push(product);
@@ -34,7 +41,7 @@ let store = new Vuex.Store({
         GET_PRODUCTS_FROM_API({commit}) {
             return axios({
                 method: "get_list",
-                url: host.toString() + '/api/v1/item',
+                url: host + '/api/v1/item',
                 params: {
                     page: 1,
                     page_limit: 50
@@ -48,6 +55,10 @@ let store = new Vuex.Store({
                     console.log(error);
                     return error;
                 })
+        },
+        // user
+        SET_AUTHORIZATION({commit}, response){
+            commit('SET_AUTHORIZED', response)
         },
 
         // cart

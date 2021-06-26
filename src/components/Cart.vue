@@ -1,10 +1,12 @@
 <template>
   <div class="cart">
-    <router-link :to="{name: 'catalog'}">
-      <div class="cart__link-to-catalog">
-        Вернуться к каталогу
-      </div>
-    </router-link>
+    <div class="router-linki">
+      <router-link :to="{name: 'catalog'}">
+        <div class="router-linki__link-to">
+          Вернуться к каталогу
+        </div>
+      </router-link>
+    </div>
     <h2>Корзина</h2>
     <p v-if="!CART.length">Корзина пуста</p>
     <cart-item
@@ -63,6 +65,7 @@ export default {
           heapify(i, 0);
         }
       }
+
       let cart = this.CART.slice();
       if (cart.length === 0)
         return cart;
@@ -85,14 +88,6 @@ export default {
 
 .cart {
   max-width: 50vw;
-
-  &__link-to-catalog {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: $padding;
-    border: solid 1px #aeaeae;
-  }
 }
 
 </style>

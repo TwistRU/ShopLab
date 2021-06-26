@@ -18,7 +18,7 @@
     <div class="cart-item__amount">
       <div class="cart-item__product-count-buttons">
         <div class="count-buttons">
-          <button class="minus-btn">
+          <button class="minus-btn" v-on:click="item['count']--; item['count'] = quantity ">
             -
           </button>
           <input
@@ -26,8 +26,9 @@
               type="number"
               min="1"
               :max="item['available']"
+              @change="item['count'] = quantity"
           >
-          <button class="plus-btn">
+          <button class="plus-btn" v-on:click="item['count']++; item['count'] = quantity">
             +
           </button>
         </div>
@@ -65,6 +66,9 @@ export default {
     },
     totalItemPrice: function () {
       return this.item['price'] * Number(this.item['count']);
+    },
+    quantity: function () {
+      return Math.max(1, Math.min(this.item['count'], this.item['available']))
     },
   },
   mounted() {
