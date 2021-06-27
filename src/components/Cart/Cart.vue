@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import CartItem from "@/components/CartItem";
+import CartItem from "@/components/Cart/CartItem";
 import {mapActions, mapGetters} from "vuex";
-import CartTotal from "@/components/CartTotal";
+import CartTotal from "@/components/Cart/CartTotal";
 
 export default {
   name: "Cart",
@@ -88,6 +88,9 @@ export default {
 
 .cart {
   max-width: 50vw;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 </style>

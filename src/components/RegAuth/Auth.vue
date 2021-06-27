@@ -51,9 +51,8 @@ export default {
           password: this.password,
         }
       }).then((response) => {
-        this.SET_AUTHORIZATION(response);
-        this.login = '';
-        this.password = '';
+        response.data.auth_state = true;
+        this.SET_AUTHORIZATION(response.data);
         this.$router.push({name: 'catalog'});
         return response
       }).catch((response) => {
