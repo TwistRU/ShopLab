@@ -33,6 +33,6 @@ bcrypt = Bcrypt(app)
 CORS(app)
 
 try:
-    os.mkdir(STATIC_FOLDER + 'image')
+    os.makedirs(STATIC_FOLDER + 'image')
 except Exception as e:
     print(e)
