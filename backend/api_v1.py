@@ -11,7 +11,7 @@ from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
 from backend.config import db
-from backend.database import ItemDB, UserDB, Transactions
+from backend.database import ItemDB, Transactions
 from backend.methods import user_is_admin_required, next_path
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
@@ -52,7 +52,10 @@ class ItemF(Resource):
         )
         if item is None:
             return {'error': 'Bad Request'}, 400
-        return {'products': [el.to_dict() for el in item]}, 200
+        return {
+                   'products': [el.to_dict() for el in item],
+                   'countOfAllItems': ItemDB.query.count()
+               }, 200
 
     @user_is_admin_required
     def post(self):
