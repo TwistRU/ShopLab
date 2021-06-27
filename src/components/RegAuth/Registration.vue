@@ -59,7 +59,11 @@ export default {
           login: this.login,
           password: this.password,
         }
+      }).then((response) => {
+        this.$router.push({name: 'auth'});
+        return response;
       })
+
     },
   }
 }
