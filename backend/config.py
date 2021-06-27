@@ -29,3 +29,8 @@ jwt = JWTManager(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 CORS(app)
+
+try:
+    os.mkdir('../dist/image')
+except:
+    pass

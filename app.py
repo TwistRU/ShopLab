@@ -22,6 +22,11 @@ def get_js(filename):
     return send_from_directory(app.static_folder + '/js/', filename)
 
 
+@app.route('/image/<filename>')
+def get_image(filename):
+    return send_from_directory(app.static_folder + '/image/', filename)
+
+
 app.register_blueprint(api_v1)
 app.register_blueprint(authBP)
 

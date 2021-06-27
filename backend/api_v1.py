@@ -1,3 +1,6 @@
+from io import BytesIO
+from PIL import Image
+
 from flask import Blueprint
 from flask_cors import CORS
 from flask_restful import Resource, reqparse, Api
@@ -5,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from backend.config import db
 from backend.database import ItemDB, UserDB
-from backend.methods import user_is_admin_required
+from backend.methods import user_is_admin_required, next_path
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
 api = Api(api_v1)
@@ -51,6 +54,13 @@ class ItemF(Resource):
     def post(self):
         args = {key: val for key, val in self.parser.parse_args().items()
                 if key in ('image', 'name', 'more_info', 'price', 'available', 'rating')}
+        bytes_io_image = BytesIO(bytes(args['image'], encoding='raw_unicode_escape'))
+        image = Image.open(bytes_io_image)
+        image_path = '../dist/image/'
+        image_name = next_path(image_path, str(hash(bytes_io_image)) + '(%s).' + image.format)
+        image.save(image_path + image_name)
+        args['image'] = image_name
+
         item = ItemDB(**args)
         db.session.add(item)
         try:
