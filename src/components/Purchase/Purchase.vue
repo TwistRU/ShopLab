@@ -7,27 +7,37 @@
         </div>
       </router-link>
     </div>
-    <h2>Итого: {{sum_in_cart}}</h2>
+    <h2>Итого: {{ sum_in_cart }}</h2>
     <p v-if="!CART.length">Корзина пуста</p>
     <PurchaseItem
-        v-for="(item, index) in CART"
+        v-for="item in CART"
         :key="item['item_id']"
         :item="item"
-        @deleteFromCart="deleteFromCart(index)"
     />
-
+    <div class="router-linki__link-to buy" @click="buy">
+      Купыт
+    </div>
   </div>
 </template>
 
 import {mapActions, mapGetters} from "vuex";
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import PurchaseItem from "@/components/Purchase/PurchaseItem";
 
 export default {
   name: "Purchase",
   components: {
     PurchaseItem,
+  },
+  methods: {
+    ...mapActions([
+      'BUY_PRODUCTS_FROM_API'
+    ]),
+    buy() {
+      this.BUY_PRODUCTS_FROM_API();
+      this.$router.push({name: 'catalog'});
+    },
   },
   computed: {
     ...mapGetters([
@@ -44,6 +54,9 @@ export default {
 </script>
 
 <style scoped>
+.buy{
+  cursor: pointer;
+}
 .purchase {
   max-width: 50vw;
   display: flex;

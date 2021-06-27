@@ -6,11 +6,6 @@
           Вернуться к каталогу
         </div>
       </router-link>
-      <router-link :to="{name: 'cart'}">
-        <div class="router-linki__link-to">
-          Корзина
-        </div>
-      </router-link>
     </div>
     <div class="Reg__inputs">
       <p>First name</p>

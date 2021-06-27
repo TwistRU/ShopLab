@@ -1,7 +1,7 @@
 <template>
   <div class="catalog-product">
     <div class="catalog-product-image">
-      <img :src="imgUrl" :alt="product_data['image']"/>  <!-- TODO delete -->
+      <img :src="makeImg" :alt="product_data['image']"/>  <!-- TODO delete -->
       <!--      <img :src="product_data.image" alt="img"/>-->  <!-- TODO uncomment -->
     </div>
     <div class="catalog-product__name">
@@ -43,6 +43,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import {host} from "@/main";
 
 export default {
   name: "Item",
@@ -59,8 +60,8 @@ export default {
     ...mapGetters([
       "CART",
     ]),
-    imgUrl: function () {
-      return "http://www.placehold.it/200x200?text=" + this.product_data['image'].toString();
+    makeImg: function () {
+      return host + 'image/' + this.product_data['image_id'];
     },
     nameAndInfoForDisplay: function () {
       let tempString = this.product_data['name'];

@@ -5,6 +5,7 @@ import Cart from "@/components/Cart/Cart";
 import Auth from "@/components/RegAuth/Auth";
 import Registration from "@/components/RegAuth/Registration";
 import Purchase from "@/components/Purchase/Purchase";
+import AdminAddItems from "@/components/Admin/AdminAddItems";
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,11 @@ let router = new VueRouter({
             name: 'purchase',
             component: Purchase,
         },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: AdminAddItems,
+        }
     ]
 })
 
