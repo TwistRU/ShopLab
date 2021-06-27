@@ -7,7 +7,7 @@
         </div>
       </router-link>
       <router-link
-          v-if="!IS_AUTHORIZED"
+          v-if="!GET_USER.authorized"
           :to="{name: 'auth'}"
       >
         <div class="router-linki__link-to">
@@ -16,11 +16,14 @@
       </router-link>
       <div v-else
            class="router-linki__link-to catalog__logout"
-           @click="LOGOUT">
+           @click="LOGOUT(); $router.push({name: 'auth'})">
         Выход
       </div>
-
-
+      <router-link v-if="GET_USER.role === 1" :to="{name: 'admin'}">
+        <div class="router-linki__link-to">
+          Админ
+        </div>
+      </router-link>
     </div>
 
     <h2>Каталог</h2>
@@ -40,9 +43,7 @@
     </div>
   </div>
 </template>
-// TODO Сделать переход на следующие страницы товаров
 // TODО Сделать страницу товара
-// TODО Сделать возможность покупки и последующего изменения БД
 <script>
 import CatalogItem from "@/components/Catalog/CatalogItem";
 import {mapActions, mapGetters, mapMutations} from "vuex"
@@ -71,10 +72,10 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'GET_USER',
       'PRODUCTS',
       'CART',
       'CURRENT_PAGE',
-      'IS_AUTHORIZED',
     ]),
   },
   mounted() {

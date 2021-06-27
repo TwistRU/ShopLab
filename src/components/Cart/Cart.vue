@@ -10,6 +10,7 @@
     <h2>Корзина</h2>
     <p v-if="!CART.length">Корзина пуста</p>
     <cart-item
+        class="cart-item"
         v-for="(item, index) in sorted_cart"
         :key="item['item_id']"
         :item="item"
@@ -32,7 +33,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "CART"
+      "CART",
     ]),
     sorted_cart: function () {
       function heapsort(array) {
@@ -88,9 +89,13 @@ export default {
 
 .cart {
   max-width: 50vw;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  .cart-item {
+    flex: 0 0 auto;
+  }
 }
 
 </style>

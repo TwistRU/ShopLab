@@ -15,7 +15,7 @@ export default {
   name: "CartTotal",
   methods: {
     purchaseBtn() {
-      if(this.IS_AUTHORIZED){
+      if(this.GET_USER.authorized){
         this.$router.push({name:'purchase'})
       }else{
         this.$router.push({name:'auth'})
@@ -25,7 +25,7 @@ export default {
   computed: {
     ...mapGetters([
       'CART',
-      'IS_AUTHORIZED',
+      'GET_USER',
     ]),
     sum_in_cart: function () {
       let sum = 0;

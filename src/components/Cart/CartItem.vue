@@ -1,7 +1,7 @@
 <template>
   <div class="cart-item__wrapper">
     <div class="cart-item__product-image">
-      <img :src="imgUrl" alt="img"/>
+      <img :src="makeImg" alt="img"/>
     </div>
     <div class="cart-item__product_info">
       <div class="cart-item__name">
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import {host} from "@/main";
+
 export default {
   name: "CartItem",
   props: {
@@ -61,8 +63,8 @@ export default {
     }
   },
   computed: {  // TODO delete
-    imgUrl: function () {
-      return "https://www.placehold.it/200x200?text=" + this.item['image'].toString();
+    makeImg: function () {
+      return host + 'image/' + this.item['image'];
     },
     totalItemPrice: function () {
       return this.item['price'] * Number(this.item['count']);
