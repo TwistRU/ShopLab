@@ -47,7 +47,12 @@ def login():
     refresh_token = create_refresh_token(user.user_id)
     return {
                'access_token': access_token,
-               'refresh_token': refresh_token
+               'refresh_token': refresh_token,
+               'first_name': user.second_name,
+               'second_name': user.second_name,
+               'email': user.email,
+               'login': user.login,
+               'role': user.role,
            }, 200
 
 

@@ -32,5 +32,5 @@ CORS(app)
 
 try:
     os.mkdir('../dist/image')
-except:
-    pass
+except Exception as e:
+    print(e)

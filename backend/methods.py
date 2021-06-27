@@ -12,7 +12,6 @@ def user_is_admin_required(func):
     @jwt_required()
     def check_user_is_admin(*args, **kwargs):
         user_id = get_jwt_identity()
-        print(user_id)
         user = UserDB.query.filter_by(user_id=user_id).first()
         if user.role == 1:
             return func(*args, **kwargs)
