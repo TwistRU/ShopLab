@@ -1,13 +1,25 @@
 from sqlalchemy import orm
+from sqlalchemy.dialects.postgresql import JSON
 
 from backend.config import db
+
+
+class Transactions(db.Model):
+    __tablename__ = 'transactions'
+    query: orm.Query
+
+    transaction_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    items = db.Column(JSON, nullable=False)
+    cost = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.Integer, nullable=False)
 
 
 class UserDB(db.Model):
     __tablename__ = 'users'
     query: orm.Query
 
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, unique=True, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String, nullable=False)
     second_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
@@ -24,7 +36,7 @@ class ItemDB(db.Model):
     image: str = db.Column(db.String, nullable=False)
     name: str = db.Column(db.String, nullable=False)
     more_info: str = db.Column(db.String)
-    price: float = db.Column(db.Float, nullable=False, )
+    price: float = db.Column(db.Float, nullable=False)
     available: int = db.Column(db.Integer, nullable=False)
     rating: float = db.Column(db.Float, nullable=False)
 

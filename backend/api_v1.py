@@ -1,13 +1,17 @@
+import datetime
 from io import BytesIO
+from flask import request
+
 from PIL import Image
 
 from flask import Blueprint
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
 from backend.config import db
-from backend.database import ItemDB, UserDB
+from backend.database import ItemDB, UserDB, Transactions
 from backend.methods import user_is_admin_required, next_path
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
@@ -89,3 +93,33 @@ class ItemF(Resource):
         db.session.delete(item)
         db.session.commit()
         return {'status': 'ok'}
+
+
+@api.resource('/buy', methods=['POST'])
+class BuyF(Resource):
+    @jwt_required()
+    def post(self):
+        json = request.get_json()
+        try:
+            cart = json['items']
+        except TypeError:
+            return {'error': 'Bad Request'}, 400
+        cost = 0
+        for item_cart in cart:
+            item = ItemDB.query.filter_by(item_id=item_cart['item_id']).first()
+            if item is None:
+                return {"error": "no item"}, 400
+            if item.available >= item_cart['quantity']:
+                cost += item_cart['quantity'] * item.price
+                ItemDB.query.filter_by(item_id=item_cart['item_id']).update({
+                    'available': item.available - item_cart['quantity']})
+
+        transaction = Transactions(
+            user_id=get_jwt_identity(),
+            items=json,
+            cost=cost,
+            date=(datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
+        )
+        db.session.add(transaction)
+        db.session.commit()
+        return {'transaction_id', transaction.transaction_id}
