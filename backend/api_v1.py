@@ -10,8 +10,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
-from backend.config import db, STATIC_FOLDER
-from backend.database import ItemDB, Transactions
+from backend.config import db
+from backend.database import ItemDB, Transactions, ImageDB
 from backend.methods import user_is_admin_required, next_path
 
 api_v1 = Blueprint('API_v1', __name__, url_prefix='/api/v1')
@@ -36,7 +36,6 @@ class ItemF(Resource):
     def get_info(self):
         item_id = self.parser.parse_args()['item_id']
         item = ItemDB.query.filter_by(item_id=item_id).first()
-        print(item)
         if item is None:
             return {'error': 'Bad Request'}, 400
         return {'product': item.to_dict()}, 200
@@ -61,14 +60,14 @@ class ItemF(Resource):
     def post(self):
         args = {key: val for key, val in self.parser.parse_args().items()
                 if key in ('image', 'name', 'more_info', 'price', 'available', 'rating')}
-        bytes_io_image = BytesIO(bytes(args['image'], encoding='raw_unicode_escape'))
-        image = Image.open(bytes_io_image)
-        image_name = next_path(STATIC_FOLDER, str(hash(bytes_io_image)) + '(%s).' + image.format)
-        image.save(STATIC_FOLDER + image_name)
-        args['image'] = image_name
+        args['image_id'] = str(hash(args['image']))
+        image = ImageDB(image_id=args['image_id'], imageB64=args['image'])
+
+        args.pop('image')
 
         item = ItemDB(**args)
         db.session.add(item)
+        db.session.add(image)
         try:
             db.session.commit()
         except IntegrityError:
@@ -92,6 +91,8 @@ class ItemF(Resource):
     def delete(self):
         item_id = self.parser.parse_args()['item_id']
         item = ItemDB.query.filter_by(item_id=item_id).first()
+        image = ImageDB.query.filter_by(image_id=item.image_id)
+        db.session.delete(image)
         db.session.delete(item)
         db.session.commit()
         return {'status': 'ok'}
@@ -111,7 +112,7 @@ class BuyF(Resource):
             item = ItemDB.query.filter_by(item_id=item_cart['item_id']).first()
             if item is None:
                 return {"error": "no item"}, 400
-            if item.available >= item_cart['quantity']:
+            if item.available >= int(item_cart['quantity']):
                 cost += item_cart['quantity'] * item.price
                 ItemDB.query.filter_by(item_id=item_cart['item_id']).update({
                     'available': item.available - item_cart['quantity']})
@@ -120,8 +121,8 @@ class BuyF(Resource):
             user_id=get_jwt_identity(),
             items=json,
             cost=cost,
-            date=(datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
+            date=int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds())
         )
         db.session.add(transaction)
         db.session.commit()
-        return {'transaction_id', transaction.transaction_id}
+        return {'transaction_id': transaction.transaction_id}

@@ -33,7 +33,7 @@ class ItemDB(db.Model):
     query: orm.Query
 
     item_id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    image: str = db.Column(db.String, nullable=False)
+    image_id: int = db.Column(db.String, db.ForeignKey('images.image_id'))
     name: str = db.Column(db.String, nullable=False)
     more_info: str = db.Column(db.String)
     price: float = db.Column(db.Float, nullable=False)
@@ -43,10 +43,18 @@ class ItemDB(db.Model):
     def to_dict(self):
         return {
             'item_id': self.item_id,
-            'image': self.image,
+            'image_id': self.image_id,
             'name': self.name,
             'more_info': self.more_info,
             'price': self.price,
             'available': self.available,
             'rating': self.rating
         }
+
+
+class ImageDB(db.Model):
+    __tablename__ = 'images'
+    query = orm.Query
+
+    image_id = db.Column(db.String, primary_key=True)
+    imageB64 = db.Column(db.String, nullable=False)
