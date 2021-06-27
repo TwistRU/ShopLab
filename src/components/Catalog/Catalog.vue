@@ -1,0 +1,111 @@
+<template>
+  <div class="catalog">
+    <div class="router-linki">
+      <router-link :to="{name: 'cart'}">
+        <div class="router-linki__link-to">
+          Корзина: {{ CART.length }}
+        </div>
+      </router-link>
+      <router-link
+          v-if="!IS_AUTHORIZED"
+          :to="{name: 'auth'}"
+      >
+        <div class="router-linki__link-to">
+          Авторизация
+        </div>
+      </router-link>
+      <div v-else
+           class="router-linki__link-to catalog__logout"
+           @click="LOGOUT">
+        Выход
+      </div>
+
+
+    </div>
+
+    <h2>Каталог</h2>
+    <CatalogItem
+        v-for="product in PRODUCTS"
+        :key="product['item_id']"
+        v-bind:product_data="product"
+    />
+    <div class="pages">
+      <div class="btn" @click="previous_page">
+        <p>&lt;&lt;</p>
+      </div>
+      <p> Стр.{{ CURRENT_PAGE.currentPage }} </p>
+      <div class="btn" @click="next_page">
+        <p>&gt;&gt;</p>
+      </div>
+    </div>
+  </div>
+</template>
+// TODO Сделать переход на следующие страницы товаров
+// TODО Сделать страницу товара
+// TODО Сделать возможность покупки и последующего изменения БД
+<script>
+import CatalogItem from "@/components/Catalog/CatalogItem";
+import {mapActions, mapGetters, mapMutations} from "vuex"
+
+export default {
+  name: "Catalog",
+  components: {
+    CatalogItem,
+  },
+  methods: {
+    ...mapMutations([
+      'SET_CURRENT_PAGE'
+    ]),
+    ...mapActions([
+      'GET_PRODUCTS_FROM_API',
+      'LOGOUT',
+    ]),
+    previous_page() {
+      this.SET_CURRENT_PAGE(Math.max(this.CURRENT_PAGE.currentPage - 1, 1));
+      this.GET_PRODUCTS_FROM_API();
+    },
+    next_page() {
+      this.SET_CURRENT_PAGE(Math.min(this.CURRENT_PAGE.currentPage + 1, this.CURRENT_PAGE.maxPage));
+      this.GET_PRODUCTS_FROM_API();
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'PRODUCTS',
+      'CART',
+      'CURRENT_PAGE',
+      'IS_AUTHORIZED',
+    ]),
+  },
+  mounted() {
+    this.GET_PRODUCTS_FROM_API();
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+.pages {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .btn {
+    cursor: pointer;
+  }
+}
+
+.catalog {
+  display: grid;
+
+  &__logout {
+    cursor: pointer;
+  }
+
+  &__link-to {
+    top: 10px;
+    padding: $padding;
+    border: solid 1px #aeaeae;
+  }
+}
+</style>

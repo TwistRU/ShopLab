@@ -10,6 +10,9 @@ let store = new Vuex.Store({
     state: {
         // products
         products: [],
+        countOfAllItems: 100,
+        currentPage: 1,
+        pageLimit: 2,
         // user
         authorized: false,
         access_token: '',
@@ -21,12 +24,22 @@ let store = new Vuex.Store({
         // products
         SET_PRODUCTS_TO_STATE: (state, products) => {
             state.products = products.products;
+            // state.countOfAllItems = products.countOfAllItems;
         },
         //user
         SET_AUTHORIZED: (state, data) => {
             state.authorized = data['auth_state'];
             state.access_token = data['access_token'];
             state.refresh_token = data['refresh_token'];
+        },
+        LOGOUT: (state) => {
+            state.authorized = false;
+            state.refresh_token = '';
+            state.access_token = '';
+        },
+        // catalog
+        SET_CURRENT_PAGE: (state, page) => {
+            state.currentPage = page;
         },
         // cart
         ADD_TO_CART: (state, product) => {
@@ -38,13 +51,13 @@ let store = new Vuex.Store({
     },
     actions: {
         // products
-        GET_PRODUCTS_FROM_API({commit}) {
+        GET_PRODUCTS_FROM_API({commit, state}) {
             return axios({
                 method: "get_list",
                 url: host + '/api/v1/item',
                 params: {
-                    page: 1,
-                    page_limit: 50
+                    page: state.currentPage,
+                    page_limit: state.pageLimit,
                 }
             })
                 .then((products) => {
@@ -56,9 +69,28 @@ let store = new Vuex.Store({
                     return error;
                 })
         },
+        // eslint-disable-next-line no-unused-vars
+        BUY_PRODUCTS_FROM_API({commit}) {
+            return axios({
+                method: 'POST',
+                url: host + '/api/v1/buy',
+                Authorization: this.access_token,
+                data: {
+                    'items': this.CART.map((item) => {
+                        item['quantity'] = item['count'];
+                    }),
+                }
+            }).catch((response) => {
+                console.log(response)
+                return response
+            })
+        },
         // user
-        SET_AUTHORIZATION({commit}, response){
+        SET_AUTHORIZATION({commit}, response) {
             commit('SET_AUTHORIZED', response)
+        },
+        LOGOUT({commit}) {
+            commit('LOGOUT')
         },
 
         // cart
@@ -70,11 +102,18 @@ let store = new Vuex.Store({
         },
     },
     getters: {
+        // catalog
+        CURRENT_PAGE(state){
+            return {currentPage: state.currentPage, maxPage: Math.ceil(state.countOfAllItems/state.pageLimit)}
+        },
         // products
         PRODUCTS(state) {
             return state.products;
         },
-
+        // user
+        IS_AUTHORIZED(state) {
+            return state.authorized;
+        },
         // cart
         CART(state) {
             return state.cart;

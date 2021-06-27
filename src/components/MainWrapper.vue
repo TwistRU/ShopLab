@@ -1,8 +1,7 @@
 <template>
   <div id="main-wrapper">
-    <keep-alive>
-      <router-view/>
-    </keep-alive>
+    <div class="mou"></div>
+    <router-view/>
   </div>
 </template>
 
@@ -18,8 +17,9 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
+  justify-content: right;
   margin-left: auto;
-  margin-right:  0;
+  margin-right: 0;
 
   &__link-to {
     top: 10px;
