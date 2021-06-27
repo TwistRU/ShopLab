@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, Api
 from sqlalchemy.exc import IntegrityError
 
-from backend.config import db
+from backend.config import db, STATIC_FOLDER
 from backend.database import ItemDB, Transactions
 from backend.methods import user_is_admin_required, next_path
 
@@ -63,9 +63,8 @@ class ItemF(Resource):
                 if key in ('image', 'name', 'more_info', 'price', 'available', 'rating')}
         bytes_io_image = BytesIO(bytes(args['image'], encoding='raw_unicode_escape'))
         image = Image.open(bytes_io_image)
-        image_path = '../dist/image/'
-        image_name = next_path(image_path, str(hash(bytes_io_image)) + '(%s).' + image.format)
-        image.save(image_path + image_name)
+        image_name = next_path(STATIC_FOLDER, str(hash(bytes_io_image)) + '(%s).' + image.format)
+        image.save(STATIC_FOLDER + image_name)
         args['image'] = image_name
 
         item = ItemDB(**args)

@@ -11,7 +11,9 @@ from flask_jwt_extended import JWTManager
 
 from flask_cors import CORS
 
-app = Flask(__name__, template_folder='../dist/', static_folder='../dist/')
+STATIC_FOLDER = "../dist/"
+
+app = Flask(__name__, template_folder='../dist/', static_folder=STATIC_FOLDER)
 
 salt = os.environ.get('SALT')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -31,6 +33,6 @@ bcrypt = Bcrypt(app)
 CORS(app)
 
 try:
-    os.mkdir('../dist/image')
+    os.mkdir(STATIC_FOLDER + 'image')
 except Exception as e:
     print(e)
